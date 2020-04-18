@@ -23,12 +23,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.get('/',
 (req, res) => {
 
-  // if cookie, cookie.cookieParser
-  // if no cookie, createSession
-  // 
-
-
-  console.log('LOGGING INITIAL REQUEST => ', req.cookies);
   res.render('index');
 });
 
@@ -106,10 +100,7 @@ app.get('/signup',
 //no need to generate new session
 app.post('/login',
 (req, res) => {
-  // console.log('REQUEST: ', req)
 
-  // Get password, salt from users where username ='username'
-  // models.Model.get()
   var isEqual;
 
   var user = req.body.username;
@@ -144,13 +135,52 @@ app.post('/login',
 //providing username and password to create a profile.
 //create a new session to associate with that profile.
 app.post('/signup',
-(req, res) => {
+  (req, res) => {
   // req.body ={username: x, password: x}
-  models.Users.create(req.body)
+
+    //check database to see if user already exists there.
+    //call Model.get()
+    //req.body.username
+    //req.body.password
+
+
+  models.Users.getUserInfo(req.body.username)
   .then((results) => {
-    // res.send('index')
-    console.log('Logging results from promise resolve => ', results);
-  });
+    console.log('Logging results from user Check => ', results);
+    //if results are undefined, craete new user in db
+    if (results === undefined) {
+      return models.Users.create(req.body);
+//bring the user to index
+    } else {
+      res.render('signup');
+    }
+  })
+  .then((results) => {
+    console.log('See if this is being hit => ', results);
+    res.render('index');
+  })
+  .catch(err => {
+    console.log('WE ARE GETTING AN ERROR: ', err);
+  })
+
+
+// req.body = {username: x, password: x}
+
+
+// {user: req.body.username, password: req.body.password}
+
+
+
+  // models.Users.create(req.body)
+  // .then((results) => {
+  //   console.log('Logging results from promise resolve => ', results);
+  //   res.status(200).render('index');
+  // })
+  // .catch((err) => {
+  //   console.log('Err from duplicate user => ', err);
+
+  //   res.sendStatus(404);
+  // });
 
   // console.log('REQUEST: ', req.body)
   // res.render('login');
