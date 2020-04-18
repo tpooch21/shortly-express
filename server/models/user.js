@@ -12,6 +12,8 @@ class Users extends Model {
     super('users');
   }
 
+  // this.tablename = 'users'
+
   /**
    * Compares a password attempt with the previously stored password and salt.
    * @param {string} attempted - The attempted password.
@@ -44,6 +46,20 @@ class Users extends Model {
 
     return super.create.call(this, newUser);
   }
+
+  getUserInfo(username) {
+
+    let userCheck = {
+      username
+    };
+
+    console.log('Logging userCheck => ', userCheck);
+
+    return super.get.call(this, userCheck);
+
+  }
+
+
 }
 
 module.exports = new Users();
