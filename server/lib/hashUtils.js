@@ -27,8 +27,11 @@ exports.createHash = (data, salt = '') => {
  * matches the stored value.
  */
 exports.compareHash = (attempted, stored, salt) => {
+  console.log('STORED:', stored, 'ATTEMPTED: ', this.createHash(attempted, salt));
+
   return stored === this.createHash(attempted, salt);
 };
+
 
 /**
  * Creates a random 32 byte string.

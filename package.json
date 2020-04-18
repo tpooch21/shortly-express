@@ -12,8 +12,7 @@
     "postinstall": "curl -s https://raw.githubusercontent.com/reactorcore/pomander/master/bin/install | bash && ./node_modules/.bin/jsdoc ./server -r -d docs",
     "start": "nodemon --ignore node_modules server",
     "test": "mocha --bail --reporter nyan test/ServerSpec.js; pkill -n node;",
-    "lint": "eslint ./",
-    "docs": 
+    "lint": "eslint ./"
   },
   "dependencies": {
     "bluebird": "^3.3.4",
@@ -24,6 +23,7 @@
     "lodash": "^4.17.4",
     "mysql": "^2.12.0",
     "node-mocks-http": "^1.6.1",
+    "nodemon": "^2.0.3",
     "request": "^2.34.0"
   },
   "devDependencies": {

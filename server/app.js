@@ -21,6 +21,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 //
 app.get('/',
 (req, res) => {
+  console.log('LOGGING INITIAL REQUEST => ', req.cookies);
   res.render('index');
 });
 
@@ -111,32 +112,24 @@ app.post('/login',
   models.Users.getUserInfo(user)
   .then(results => {
     isEqual = models.Users.compare(password, results.password, results.salt);
+    // console.log('ISEQUAL IS ',isEqual);
+    if (isEqual === true) {
+      console.log('TRUE')
+      res.render('index')
+    } else {
+      console.log('FALSE')
+      res.render('signup')
+    }
   })
   .catch((err) => res.sendStatus(404));
 
 
-  //if than statement
-  if (isEqual === true) {
-    res.render('index')
-  } else {
-    res.render('signup')
-  }
 
-  // {
-  //   id: 1,
-  //   username: 'Phamner',
-  //   password: 'mysecretpassword',
-  //   salt: 'secretSalt'
+  // is (!isEqual) {
+  // throw (err)
+  /*
+  */
   // }
-
-  //get request to the *users* table.
-
-  //Return the hashed password associated with that user
-  //models.Users.compare(password (input), hashed password, )
-  //iterate thru to see if username and pw exist.
-    //if yes, send them to index (?)
-    //if no...
-  // res.render('login');
 
   // models.Users.compare
 });
@@ -146,13 +139,13 @@ app.post('/login',
 app.post('/signup',
 (req, res) => {
   // req.body ={username: x, password: x}
-  // return models.Users.create(req.body)
-  //.then((results) => {
-  //
-  //  })
-  //.catch()
+  models.Users.create(req.body)
+  .then((results) => {
+    // res.send('index')
+    console.log('Logging results from promise resolve => ', results);
+  });
 
-  console.log('REQUEST: ', req)
+  // console.log('REQUEST: ', req.body)
   // res.render('login');
 });
 
