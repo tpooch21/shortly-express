@@ -8,6 +8,8 @@ const models = require('./models');
 
 const app = express();
 
+// const router = require('express').Router();
+
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 app.use(partials());
@@ -16,18 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
-
-app.get('/', 
+app.get('/',
 (req, res) => {
   res.render('index');
 });
 
-app.get('/create', 
+app.get('/create',
 (req, res) => {
   res.render('index');
 });
 
-app.get('/links', 
+app.get('/links',
 (req, res, next) => {
   models.Links.getAll()
     .then(links => {
@@ -38,7 +39,7 @@ app.get('/links',
     });
 });
 
-app.post('/links', 
+app.post('/links',
 (req, res, next) => {
   var url = req.body.url;
   if (!models.Links.isValidUrl(url)) {
@@ -78,6 +79,16 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
+// Routes to process POST requests for login and signup
+// If we get a request from the client to log a user in or allow a user to sign up, these routes will handle the requests and direct the requests to the appropriate controllers
+
+// If cookies (login), parseCookies first
+
+app.post('/login', )
+
+// If no cookies, probably go straight to createSession
+
+app.post('/signup', Auth.createSession); // Callback TBD
 
 
 /************************************************************/

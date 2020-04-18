@@ -13,6 +13,8 @@ class Sessions extends Model {
     super('sessions');
   }
 
+  // this.tablename = 'sessions'
+
   /**
    * Determines if a session is associated with a logged in user.
    * @params {Object} session - Session object (requires a user property)
