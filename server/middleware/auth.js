@@ -20,6 +20,4 @@ module.exports.createSession = (req, res, next) => {
 // Add additional authentication middleware functions below
 /************************************************************/
 
-
-
-
+//creates a new session.  Creating a new session requires an id(?)

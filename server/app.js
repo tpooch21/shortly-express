@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
+//
 app.get('/',
 (req, res) => {
   res.render('index');
@@ -27,6 +28,8 @@ app.get('/create',
 (req, res) => {
   res.render('index');
 });
+
+
 
 app.get('/links',
 (req, res, next) => {
@@ -44,6 +47,7 @@ app.post('/links',
   var url = req.body.url;
   if (!models.Links.isValidUrl(url)) {
     // send back a 404 if link is not valid
+    // res.send('your mother')
     return res.sendStatus(404);
   }
 
@@ -78,18 +82,79 @@ app.post('/links',
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
+//if user is not logged in, call get request to /login endpoint
+app.get('/login',
+(req, res) => {
+  res.render('login');
+  console.log(res)
+});
 
-// Routes to process POST requests for login and signup
-// If we get a request from the client to log a user in or allow a user to sign up, these routes will handle the requests and direct the requests to the appropriate controllers
+app.get('/signup',
+(req, res) => {
+  res.render('signup');
+});
 
-// If cookies (login), parseCookies first
+//providing username and password to log in.
+//no need to generate new session
+app.post('/login',
+(req, res) => {
+  // console.log('REQUEST: ', req)
 
-app.post('/login', )
+  // Get password, salt from users where username ='username'
+  // models.Model.get()
+  var isEqual;
 
-// If no cookies, probably go straight to createSession
+  var user = req.body.username;
+  // console.log(user)
+  var password = req.body.password;
+  // console.log(password)
+  models.Users.getUserInfo(user)
+  .then(results => {
+    isEqual = models.Users.compare(password, results.password, results.salt);
+  })
+  .catch((err) => res.sendStatus(404));
 
-app.post('/signup', Auth.createSession); // Callback TBD
 
+  //if than statement
+  if (isEqual === true) {
+    res.render('index')
+  } else {
+    res.render('signup')
+  }
+
+  // {
+  //   id: 1,
+  //   username: 'Phamner',
+  //   password: 'mysecretpassword',
+  //   salt: 'secretSalt'
+  // }
+
+  //get request to the *users* table.
+
+  //Return the hashed password associated with that user
+  //models.Users.compare(password (input), hashed password, )
+  //iterate thru to see if username and pw exist.
+    //if yes, send them to index (?)
+    //if no...
+  // res.render('login');
+
+  // models.Users.compare
+});
+
+//providing username and password to create a profile.
+//create a new session to associate with that profile.
+app.post('/signup',
+(req, res) => {
+  // req.body ={username: x, password: x}
+  // return models.Users.create(req.body)
+  //.then((results) => {
+  //
+  //  })
+  //.catch()
+
+  console.log('REQUEST: ', req)
+  // res.render('login');
+});
 
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail
