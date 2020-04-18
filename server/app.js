@@ -4,6 +4,7 @@ const utils = require('./lib/hashUtils');
 const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
+const cookie = require('./middleware/cookieParser');
 const models = require('./models');
 
 const app = express();
@@ -21,6 +22,12 @@ app.use(express.static(path.join(__dirname, '../public')));
 //
 app.get('/',
 (req, res) => {
+
+  // if cookie, cookie.cookieParser
+  // if no cookie, createSession
+  // 
+
+
   console.log('LOGGING INITIAL REQUEST => ', req.cookies);
   res.render('index');
 });
