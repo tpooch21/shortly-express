@@ -9,8 +9,6 @@ const models = require('./models');
 
 const app = express();
 
-// const router = require('express').Router();
-
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 app.use(partials());
@@ -18,6 +16,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
+
+app.use(cookie);
+
+app.use(Auth.createSession);
 
 //
 app.get('/',
@@ -79,23 +81,12 @@ app.post('/links',
     .catch(link => {
       res.status(200).send(link);
     });
+
 });
 
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
-//if user is not logged in, call get request to /login endpoint
-app.get('/login',
-(req, res) => {
-  res.render('login');
-  console.log(res)
-});
-
-app.get('/signup',
-(req, res) => {
-  res.render('signup');
-});
-
 //providing username and password to log in.
 //no need to generate new session
 app.post('/login',
@@ -138,12 +129,6 @@ app.post('/signup',
   (req, res) => {
   // req.body ={username: x, password: x}
 
-    //check database to see if user already exists there.
-    //call Model.get()
-    //req.body.username
-    //req.body.password
-
-
   models.Users.getUserInfo(req.body.username)
   .then((results) => {
     console.log('Logging results from user Check => ', results);
@@ -161,29 +146,8 @@ app.post('/signup',
   })
   .catch(err => {
     console.log('WE ARE GETTING AN ERROR: ', err);
-  })
+  });
 
-
-// req.body = {username: x, password: x}
-
-
-// {user: req.body.username, password: req.body.password}
-
-
-
-  // models.Users.create(req.body)
-  // .then((results) => {
-  //   console.log('Logging results from promise resolve => ', results);
-  //   res.status(200).render('index');
-  // })
-  // .catch((err) => {
-  //   console.log('Err from duplicate user => ', err);
-
-  //   res.sendStatus(404);
-  // });
-
-  // console.log('REQUEST: ', req.body)
-  // res.render('login');
 });
 
 /************************************************************/
